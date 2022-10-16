@@ -7,6 +7,7 @@ pygame.init()
 
 size = width, height = 600, 600
 screen = pygame.display.set_mode(size)
+clock = pygame.time.Clock()
 
 BG_BLUE = (135, 206, 250)
 WHITE = (255, 255, 255)
@@ -42,6 +43,7 @@ class Triangle:
 player = Triangle(20, (300, 300), math.pi/4);
 
 while 1:
+    clock.tick(30)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
