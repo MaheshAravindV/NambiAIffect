@@ -51,10 +51,9 @@ class Triangle:
 player = Triangle(20, [300, 300], math.pi/2)
 
 
-def find_direction():
-    mouse = pygame.mouse.get_pos()
-    y = 300 - mouse[1]
-    x = mouse[0] - 300
+def find_direction(src, dest):
+    x = dest[0] - src[0]
+    y = src[1] - dest[1]
     if x == 0:
         if y >= 0:
             return -math.pi/2
@@ -66,15 +65,15 @@ def find_direction():
 
 
 def print_bg():
-    global bg_x, bg_y
-    if bg_x > 600:
-        bg_x -= 600
-    if bg_x < 0:
-        bg_x += 600
-    if bg_y > 600:
-        bg_y -= 600
-    if bg_y < 0:
-        bg_y += 600
+    global x_offset, y_offset
+    if x_offset > 600:
+        x_offset -= 600
+    if x_offset < 0:
+        x_offset += 600
+    if y_offset > 600:
+        y_offset -= 600
+    if y_offset < 0:
+        y_offset += 600
     for x_off in range(-1, 2):
         for y_off in range(-1, 2):
             screen.blit(background_image, (bg_x + x_off * 600, bg_y + y_off * 600))
@@ -86,11 +85,13 @@ while 1:
         if event.type == pygame.QUIT:
             sys.exit()
     print_bg()
-    player_direction = find_direction()
+    player_direction = find_direction(player.base_middle, pygame.mouse.get_pos())
+
+    # TODO Use acceleration instead of just constant velocity to make motion smoother
 
     velocity = 10
-    bg_x += math.cos(player_direction + math.pi) * velocity
-    bg_y -= math.sin(player_direction + math.pi) * velocity
+    x_offset += math.cos(player_direction + math.pi) * velocity
+    y_offset -= math.sin(player_direction + math.pi) * velocity
 
     player.set_direction(player_direction)
     pygame.draw.polygon(screen, WHITE, player.points)
